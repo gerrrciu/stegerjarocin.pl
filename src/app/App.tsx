@@ -27,6 +27,11 @@ const SERVICES = [
     desc: "Zabezpieczenie lakieru przezroczystą folią PPF (Paint Protection Film). Niewidoczna ochrona przed kamieniami, zarysowaniami i insektami.",
     details: ["Folia samoregenerująca", "Ochrona przed odpryskami", "Połysk lub mat", "Przód lub całe auto"],
   },
+  {
+    title: "Dechroming",
+    desc: "Zmiana wyglądu samochodu poprzez oklejenie chromowanych elementów wysokiej jakości folią. To szybki sposób na uzyskanie nowoczesnego i bardziej sportowego charakteru pojazdu bez trwałych modyfikacji.",
+    details: ["Listwy okienne", "Grill i emblematy", "Lusterka i detale", "Folia odporna na warunki atmosferyczne"],
+},
 ];
 
 const GALLERY = [
@@ -116,7 +121,13 @@ export default function App() {
     <div className="min-h-screen bg-background text-foreground" style={{ fontFamily: "'DM Sans', sans-serif" }}>
 
       {/* NAV */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ${scrolled ? "bg-background/96 backdrop-blur border-b border-border" : "bg-transparent"} bg-[#000000]`}>
+      <nav
+  className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+    scrolled
+      ? "bg-[#000000]/95 backdrop-blur border-b border-border"
+      : "bg-[#000000]"
+  }`}
+>
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between bg-[#000000]">
           {/* Logo image */}
           <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="h-8 flex items-center">
@@ -168,7 +179,7 @@ export default function App() {
       </nav>
 
       {/* HERO */}
-      <section className="relative h-screen flex items-end overflow-hidden">
+      <section className="relative h-screen flex items-center overflow-hidden pt-28">
         <img
           src="https://images.unsplash.com/photo-1589362086311-47e158ed1a85?w=1900&h=1200&fit=crop&auto=format"
           alt="Czerwone Ferrari — oklejanie i ochrona lakieru"
@@ -177,23 +188,25 @@ export default function App() {
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/55 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-r from-background/40 via-transparent to-transparent" />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-6 pb-20 md:pb-28 w-full">
+        <div className="relative z-10 max-w-6xl mx-auto px-6 pt-20 pb-20 md:pt-28 md:pb-28 w-full">
           <h1
-            className="text-foreground leading-[1.05] mb-6"
-            style={{
-              fontFamily: "'Barlow Condensed', sans-serif",
-              fontSize: "clamp(2.6rem, 7vw, 5.8rem)",
-              fontWeight: 700,
-            }}
-          >
-            Twój samochód.<br />
-            <span style={{ color: "#d10000", fontWeight: 800 }}>
-              Nowa odsłona.
-            </span>
-          </h1>
+  className="text-foreground leading-[1.05] mb-6"
+  style={{
+    fontFamily: "'Barlow Condensed', sans-serif",
+    fontSize: "clamp(2.6rem, 7vw, 5.8rem)",
+    fontWeight: 700,
+  }}
+>
+  Twój samochód.<br />
+  <span style={{ color: "#d10000", fontWeight: 800 }}>
+    Twój pomysł.
+  </span>
+  <br />
+  Nasze wykonanie.
+</h1>
           <p className="text-muted-foreground max-w-lg text-base md:text-lg leading-relaxed mb-10" style={{ fontWeight: 300 }}>
-            Przyciemniamy szyby, zmieniamy kolor auta i zabezpieczamy lakier folią PPF.
-            Precyzja i jakość na każdym etapie.
+            Tworzymy wyjątkowy wygląd Twojego samochodu.
+Przyciemnianie szyb, zmiana koloru, dechroming i ochrona lakieru folią PPF.
           </p>
           <div className="flex flex-wrap gap-4">
             <button
@@ -256,14 +269,14 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="mb-16">
             <h2
-              className="text-foreground leading-[1.15] max-w-xl"
+              className="text-foreground text-center leading-[1.15]"
               style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "clamp(2.2rem, 4.5vw, 3.6rem)", fontWeight: 700, letterSpacing: "0.02em", textTransform: "uppercase" }}
             >
-              Co robimy
+              CO ROBIMY
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
             {SERVICES.map((service, index) => (
               <div
                 key={index}
@@ -297,10 +310,10 @@ export default function App() {
       <section id="realizacje" className="py-24 md:py-36">
         <div className="max-w-6xl mx-auto px-6">
           <h2
-            className="text-foreground mb-14 leading-[1.15]"
-            style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "clamp(1.9rem, 3.8vw, 3rem)", fontWeight: 700 }}
+            className="text-foreground text-center mb-14 leading-[1.15]"
+            style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "clamp(2.2rem, 4.5vw, 3.6rem)", fontWeight: 700 }}
           >
-            Nasze prace
+            NASZE PRACE
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4" style={{ gridAutoRows: "280px" }}>
@@ -346,15 +359,31 @@ export default function App() {
               ))}
             </ul>
 
-            <a
-              href="tel:+48665183331"
-              className="mt-10 inline-flex items-center gap-3 bg-accent text-accent-foreground px-7 py-3.5 text-sm tracking-wide hover:opacity-90 transition-opacity group"
-              style={{ borderRadius: "2px" }}
-            >
-              <Phone size={15} />
-              Zadzwoń teraz
-            </a>
-          </div>
+            <div className="mt-10 flex flex-col gap-4">
+
+  <a
+    href="tel:+48665183331"
+    className="inline-flex items-center justify-center gap-3 bg-accent text-accent-foreground px-7 py-3.5 text-sm tracking-wide hover:opacity-90 transition-opacity"
+    style={{ borderRadius: "2px" }}
+  >
+    <Phone size={15} />
+    Zadzwoń teraz
+  </a>
+
+  <a
+    href="https://wa.me/48665183331?text=Dzień%20dobry.%20Chciałbym%20otrzymać%20wycenę."
+    target="_blank"
+    rel="noopener noreferrer"
+    className="inline-flex items-center justify-center gap-3 bg-green-600 text-white px-7 py-3.5 text-sm tracking-wide hover:bg-green-700 transition-colors"
+    style={{ borderRadius: "2px" }}
+  >
+    {/* tutaj Twoje SVG */}
+    Napisz na WhatsApp
+  </a>
+
+</div>   {/* koniec przycisków */}
+
+</div>   {/* KONIEC LEWEJ KOLUMNY */}
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             {[
@@ -395,6 +424,7 @@ export default function App() {
                 <option value="Przyciemnianie szyb">Przyciemnianie szyb</option>
                 <option value="Oklejanie — zmiana koloru">Oklejanie — zmiana koloru</option>
                 <option value="Folia PPF — ochrona lakieru">Folia PPF — ochrona lakieru</option>
+                <option value="Dechroming">Dechroming</option>
                 <option value="Kilka usług">Kilka usług</option>
               </select>
             </div>
