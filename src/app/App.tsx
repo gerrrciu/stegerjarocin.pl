@@ -1,6 +1,6 @@
 import image_steger_logo_bia_e_bez_podpisu from '@/imports/steger_logo_bia_e_bez_podpisu.png'
 import { useState, useEffect } from "react";
-import { Menu, X, ArrowRight, MapPin, Phone, Mail } from "lucide-react";
+import { Menu, X, ArrowRight, MapPin, Phone, Mail, Clock3 } from "lucide-react";
 import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
 import logoBaner from "@/imports/logo_baner.jpg";
 
@@ -349,6 +349,8 @@ Przyciemnianie szyb, zmiana koloru, dechroming i ochrona lakieru folią PPF.
                 { icon: MapPin, label: "ul. Wrocławska 79b, 63-200 Jarocin" },
                 { icon: Phone, label: "+48 665 183 331" },
                 { icon: Mail, label: "steger.jarocin@gmail.com" },
+                { icon: Clock3, label: "Poniedziałek – Piątek: 8:00–16:00" },
+                
               ].map(({ icon: Icon, label }) => (
                 <li key={label} className="flex items-center gap-4">
                   <span className="w-10 h-10 flex items-center justify-center border border-border flex-shrink-0" style={{ borderRadius: "2px" }}>
