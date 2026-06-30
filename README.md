@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
   # stegerjarocin
 
@@ -9,3 +10,6 @@
 
   Run `npm run dev` to start the development server.
   
+=======
+# stegerjarocin.pl
+>>>>>>> b6f64ff579453c45b7325ae4fefee0fa2c8c7daf
