@@ -118,6 +118,7 @@ export default function App() {
       {/* NAV */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ${scrolled ? "bg-background/96 backdrop-blur border-b border-border" : "bg-transparent"} bg-[#000000]`}>
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between bg-[#000000]">
+          {/* Logo image */}
           <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="h-8 flex items-center">
             <ImageWithFallback
               src={image_steger_logo_bia_e_bez_podpisu}
