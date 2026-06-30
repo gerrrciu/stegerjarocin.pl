@@ -192,7 +192,7 @@ export default function App() {
             </span>
           </h1>
           <p className="text-muted-foreground max-w-lg text-base md:text-lg leading-relaxed mb-10" style={{ fontWeight: 300 }}>
-            Przyciemniamy szyby, zmieniamy kolor auta i chronimy lakier folią PPF.
+            Przyciemniamy szyby, zmieniamy kolor auta i zabezpieczamy lakier folią PPF.
             Precyzja i jakość na każdym etapie.
           </p>
           <div className="flex flex-wrap gap-4">
@@ -300,7 +300,7 @@ export default function App() {
             className="text-foreground mb-14 leading-[1.15]"
             style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: "clamp(1.9rem, 3.8vw, 3rem)", fontWeight: 700 }}
           >
-            Nasza praca mówi sama
+            Nasze prace
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4" style={{ gridAutoRows: "280px" }}>
