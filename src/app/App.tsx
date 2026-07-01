@@ -1,6 +1,6 @@
 import image_steger_logo_bia_e_bez_podpisu from '@/imports/steger_logo_bia_e_bez_podpisu.png'
 import { useState, useEffect } from "react";
-import { Menu, X, ArrowRight, MapPin, Phone, Mail, Clock3 } from "lucide-react";
+import { Menu, X, ArrowRight, MapPin, Phone, Mail, Clock3, MessageSquare } from "lucide-react";
 import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
 import logoBaner from "@/imports/logo_baner.jpg";
 
@@ -56,6 +56,8 @@ const GALLERY = [
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [currentYear, setCurrentYear] = useState<string>("2026");
+  const [showCookies, setShowCookies] = useState(false);
 
   // === FORMULARZ ===
   const [formData, setFormData] = useState({
@@ -69,6 +71,11 @@ export default function App() {
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
 
   useEffect(() => {
+    const isAccepted = localStorage.getItem("cookiesAccepted");
+  if (!isAccepted) {
+    setShowCookies(true);
+  }
+    setCurrentYear(new Date().getFullYear().toString());
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
@@ -78,6 +85,10 @@ export default function App() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     setMenuOpen(false);
   };
+  const acceptCookies = () => {
+  localStorage.setItem("cookiesAccepted", "true");
+  setShowCookies(false);
+};
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -373,15 +384,23 @@ Przyciemnianie szyb, zmiana koloru, dechroming i ochrona lakieru folią PPF.
   </a>
 
   <a
-    href="https://wa.me/48665183331?text=Dzień%20dobry.%20Chciałbym%20otrzymać%20wycenę."
-    target="_blank"
-    rel="noopener noreferrer"
-    className="inline-flex items-center justify-center gap-3 bg-green-600 text-white px-7 py-3.5 text-sm tracking-wide hover:bg-green-700 transition-colors"
-    style={{ borderRadius: "2px" }}
+  href="https://wa.me/48665183331?text=Dzień%20dobry.%20Chciałbym%20otrzymać%20wycenę."
+  target="_blank"
+  rel="noopener noreferrer"
+  className="inline-flex items-center justify-center gap-3 bg-green-600 text-white px-7 py-3.5 text-sm tracking-wide hover:bg-green-700 transition-colors"
+  style={{ borderRadius: "2px" }}
+>
+  {/* Oryginalne logo WhatsApp w formacie SVG */}
+  <svg 
+    viewBox="0 0 24 24" 
+    width="16" 
+    height="16" 
+    fill="currentColor"
   >
-    {/* tutaj Twoje SVG */}
-    Napisz na WhatsApp
-  </a>
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.455 5.704 1.456h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+  </svg>
+  Napisz na WhatsApp
+</a>
 
 </div>   {/* koniec przycisków */}
 
@@ -389,25 +408,25 @@ Przyciemnianie szyb, zmiana koloru, dechroming i ochrona lakieru folią PPF.
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             {[
-              { id: "name", label: "Imię / Nick", type: "text", placeholder: "Jan Kowalski" },
-              { id: "phone", label: "Telefon lub email", type: "tel", placeholder: "+48 600 000 000 / example@email.com" },
-              { id: "car", label: "Pojazd", type: "text", placeholder: "np. BMW E90, Opel Astra Kombi" },
-            ].map(({ id, label, type, placeholder }) => (
-              <div key={id} className="flex flex-col gap-2">
-                <label htmlFor={id} className="text-xs tracking-[0.15em] uppercase text-muted-foreground">
-                  {label}
-                </label>
-                <input
-                  id={id}
-                  type={type}
-                  placeholder={placeholder}
-                  value={formData[id as keyof typeof formData]}
-                  onChange={(e) => setFormData(prev => ({ ...prev, [id]: e.target.value }))}
-                  className="bg-background border border-border text-foreground placeholder:text-muted-foreground px-4 py-3 text-sm focus:outline-none focus:border-accent/60 transition-colors"
-                  style={{ borderRadius: "2px" }}
-                  required
-                />
-              </div>
+  { id: "name" as const, label: "Imię / Nick", type: "text", placeholder: "Jan Kowalski" },
+  { id: "phone" as const, label: "Telefon lub email", type: "tel", placeholder: "+48 600 000 000 / example@email.com" },
+  { id: "car" as const, label: "Pojazd", type: "text", placeholder: "np. BMW E90, Opel Astra Kombi" },
+].map(({ id, label, type, placeholder }) => (
+  <div key={id} className="flex flex-col gap-2">
+    <label htmlFor={id} className="text-xs tracking-[0.15em] uppercase text-muted-foreground">
+      {label}
+    </label>
+    <input
+      id={id}
+      type={type}
+      placeholder={placeholder}
+      value={formData[id]}
+      onChange={(e) => setFormData(prev => ({ ...prev, [id]: e.target.value }))}
+      className="bg-background border border-border text-foreground placeholder:text-muted-foreground px-4 py-3 text-sm focus:outline-none focus:border-accent/60 transition-colors"
+      style={{ borderRadius: "2px" }}
+      required
+    />
+  </div>
             ))}
 
             <div className="flex flex-col gap-2">
@@ -445,16 +464,39 @@ Przyciemnianie szyb, zmiana koloru, dechroming i ochrona lakieru folią PPF.
                 style={{ borderRadius: "2px" }}
               />
             </div>
+            {/* Dodany checkbox zgody RODO */}
+{/* Zgoda RODO z klikalnym linkiem na końcu */}
+<div className="flex items-start gap-3 mt-4 mb-2">
+  <input
+    id="rodo-checkbox"
+    type="checkbox"
+    className="mt-1 cursor-pointer accent-accent"
+    required
+  />
+  <label htmlFor="rodo-checkbox" className="text-[11px] text-muted-foreground leading-tight cursor-pointer select-none">
+    Wyrażam zgodę na przetwarzanie moich danych osobowych przez firmę Steger w celu obsługi przesłanego zapytania. Wiem, że mogę wycofać tę zgodę w dowolnym momencie. Szczegóły znajdziesz w dokumencie:{" "}
+    <a 
+      href="/polityka-prywatnosci.html" 
+      target="_blank" 
+      rel="noopener noreferrer"
+      className="text-accent underline underline-offset-2 hover:opacity-80 transition-opacity"
+      onClick={(e) => e.stopPropagation()} // Zapobiega zaznaczaniu checkboxa przy kliknięciu w link
+    >
+      Polityka Prywatności
+    </a>.
+  </label>
+</div>
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="mt-1 bg-accent text-accent-foreground py-3.5 text-sm tracking-wide hover:opacity-90 transition-opacity flex items-center justify-center gap-2 group disabled:opacity-70"
-              style={{ borderRadius: "2px" }}
-            >
-              {isSubmitting ? "Wysyłam..." : "Wyślij zapytanie"}
-              {!isSubmitting && <ArrowRight size={15} className="transition-transform duration-200 group-hover:translate-x-1" />}
-            </button>
+{/* Główny przycisk formularza, który już miałeś w kodzie */}
+<button
+  type="submit"
+  disabled={isSubmitting}
+  className="mt-2 bg-accent text-accent-foreground py-3.5 text-sm tracking-wide hover:opacity-90 transition-opacity flex items-center justify-center gap-2 group disabled:opacity-70 w-full"
+  style={{ borderRadius: "2px" }}
+>
+  {isSubmitting ? "Wysyłam..." : "Wyślij zapytanie"}
+  {!isSubmitting && <ArrowRight size={15} className="transition-transform duration-200 group-hover:translate-x-1" />}
+</button>
 
             {submitStatus === "success" && (
               <p className="text-green-500 text-sm mt-2">✅ Wiadomość wysłana! Odezwiemy się szybko.</p>
@@ -475,10 +517,39 @@ Przyciemnianie szyb, zmiana koloru, dechroming i ochrona lakieru folią PPF.
             className="h-7 w-auto object-contain opacity-80"
           />
           <p className="text-muted-foreground text-xs text-center">
-            © {new Date().getFullYear()} Steger. Wszelkie prawa zastrzeżone.
-          </p>
-          <p className="text-muted-foreground text-xs">ul. Wrocławska 79b, Jarocin</p>
+  © {currentYear} Steger. Wszelkie prawa zastrzeżone.
+</p>
+          
+          {/* Adres i Twój unikalny licznik wyświetleń */}
+          <div className="flex flex-col items-center md:items-end gap-2">
+            <p className="text-muted-foreground text-xs">ul. Wrocławska 79b, Jarocin</p>
+            
+            <img 
+              src="https://www.hitwebcounter.com/counter/counter.php?page=21506939&style=0038&nbdigits=5&type=ip" 
+              alt="Licznik odwiedzin" 
+              className="opacity-70 h-5"
+              style={{ border: 0 }}
+            />
+          
+          </div>
         </div>
+        {/* BANER COOKIES */}
+      {showCookies && (
+        <div className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur border-t border-border z-50 py-4 px-6 transition-all duration-300">
+          <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-muted-foreground text-xs sm:text-sm text-center sm:text-left max-w-3xl leading-relaxed">
+              Nasza strona korzysta z plików cookies (ciasteczek) w celach statystycznych (Google Analytics) oraz aby zapewnić Ci maksymalną wygodę podczas przeglądania witryny. Możesz samodzielnie zarządzać cookies w ustawieniach swojej przeglądarki.
+            </p>
+            <button
+              onClick={acceptCookies}
+              className="bg-accent text-accent-foreground px-5 py-2 text-xs tracking-wide hover:opacity-90 transition-opacity flex-shrink-0"
+              style={{ borderRadius: "2px" }}
+            >
+              Akceptuję
+            </button>
+          </div>
+        </div>
+      )}
       </footer>
     </div>
   );
