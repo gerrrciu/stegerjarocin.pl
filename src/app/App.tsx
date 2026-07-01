@@ -349,7 +349,7 @@ Przyciemnianie szyb, zmiana koloru, dechroming i ochrona lakieru folią PPF.
                 { icon: MapPin, label: "ul. Wrocławska 79b, 63-200 Jarocin" },
                 { icon: Phone, label: "+48 665 183 331" },
                 { icon: Mail, label: "steger.jarocin@gmail.com" },
-                { icon: Clock3, label: "Poniedziałek – Piątek: 8:00–16:00" },
+                { icon: Clock3, label: "Godziny otwarcia: Poniedziałek – Piątek 8:00–16:00" },
                 
               ].map(({ icon: Icon, label }) => (
                 <li key={label} className="flex items-center gap-4">
