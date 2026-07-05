@@ -401,7 +401,7 @@ export default function App() {
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             {[
               { id: "name" as const, label: "Imię / Nick", type: "text", placeholder: "Jan Kowalski" },
-              { id: "phone" as const, label: "Telefon lub email", type: "tel", placeholder: "+48 600 000 000 / example@email.com" },
+              { id: "phone" as const, label: "Telefon lub email", type: "text", placeholder: "+48 600 000 000 / example@email.com" },
               { id: "car" as const, label: "Pojazd", type: "text", placeholder: "np. BMW E90, Opel Astra Kombi" },
             ].map(({ id, label, type, placeholder }) => (
               <div key={id} className="flex flex-col gap-2">
