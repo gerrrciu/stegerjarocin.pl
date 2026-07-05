@@ -252,7 +252,7 @@ export default function App() {
               Pasja do motoryzacji od lat
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-5" style={{ fontWeight: 300 }}>
-              Firma Steger to specjalistyczny zakład zajmujący się profesjonalnym oklejaniem pojazdów
+              W firmie STEGER zajmujemy się profesjonalnym oklejaniem pojazdów
               i przyciemnianiem szyb w autach. Każde zlecenie traktujemy indywidualnie —
               dbamy o każdy detal, od przygotowania powierzchni po finalne wykończenie.
             </p>
