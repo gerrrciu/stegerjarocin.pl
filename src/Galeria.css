@@ -1,0 +1,98 @@
+.galeria-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+}
+
+.galeria-container {
+  display: flex;
+  gap: 15px; /* Odstęp między zdjęciami */
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  width: 100%;
+  padding: 10px 0;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  scrollbar-width: none; /* Ukrywa pasek przewijania na Firefox */
+}
+
+.galeria-container {
+  display: flex;
+  overflow-x: auto; /* To pozwala telefonowi na natywne przewijanie */
+  -webkit-overflow-scrolling: touch; /* Wymusza maślany, płynny ruch z bezwładnością na starszych Safari */
+  
+  /* Ukrywanie paska przewijania (scrollbara) */
+  scrollbar-width: none; /* Firefox */
+}
+.galeria-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.galeria-container::-webkit-scrollbar {
+  display: none; /* Ukrywa pasek przewijania na Chrome/Safari */
+}
+
+.galeria-container.active {
+  cursor: grabbing;
+}
+
+/* Kafelek na zdjęcie - stała wysokość, szerokość dopasuje się sama */
+.galeria-item {
+  height: 300px; /* Tutaj ustawiasz JAK WYSOKIE mają być wszystkie zdjęcia */
+  flex-shrink: 0; /* Blokuje zgniatanie zdjęć */
+  overflow: hidden; /* Uczula ramkę, żeby obrazek nie wystawał przy powiększeniu */
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Zdjęcie wewnątrz kafelka */
+.galeria-item img {
+  height: 100%;  /* Wypełnia całą wysokość kafelka (300px) */
+  width: auto;   /* Szerokość dopasowuje się proporcjonalnie do zdjęcia */
+  display: block;
+  transition: transform 0.4s ease; /* Płynny zoom */
+  pointer-events: none;
+}
+
+/* Płynne powiększenie wewnątrz ramki po najechaniu myszką */
+.galeria-item:hover img {
+  transform: scale(1.08);
+}
+
+/* Strzałki */
+.galeria-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(226, 43, 0, 0.9); /* Twój czerwony */
+  color: white;
+  border: none;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.galeria-arrow:hover {
+  background: rgb(180, 35, 0);
+}
+
+.galeria-arrow.left { left: -10px; }
+.galeria-arrow.right { right: -10px; }
+
+@media (max-width: 768px) {
+  .galeria-arrow { display: none; } /* Na telefonach ukrywamy strzałki */
+  .galeria-wrapper { padding: 20px 10px; }
+  .galeria-item { height: 220px; } /* Na telefonach zdjęcia mogą być ciut niższe */
+}

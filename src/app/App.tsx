@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, ArrowRight, MapPin, Phone, Mail, Clock3 } from "lucide-react";
 import { ImageWithFallback } from "@/app/components/figma/ImageWithFallback";
 import logoBaner from "@/imports/logo_baner.jpg";
+import { Galeria } from "@/Galeria";
 
 const NAV_LINKS = [
   { label: "O nas", id: "o-nas" },
@@ -329,16 +330,9 @@ export default function App() {
             NASZE PRACE
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4" style={{ gridAutoRows: "280px" }}>
-            <div className="md:row-span-2 overflow-hidden bg-secondary" style={{ borderRadius: "3px" }}>
-              <img src={GALLERY[0].src} alt={GALLERY[0].alt} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
-            </div>
-            {GALLERY.slice(1).map((img, i) => (
-              <div key={i} className="overflow-hidden bg-secondary" style={{ borderRadius: "3px" }}>
-                <img src={img.src} alt={img.alt} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
-              </div>
-            ))}
-          </div>
+          {/* Nowa, automatyczna i płynna galeria */}
+          <Galeria />
+
         </div>
       </section>
 
