@@ -57,7 +57,7 @@ export function PelnaGaleria() {
         
         {/* Responsywny podział na tekst mobilny i desktopowy */}
         <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto leading-relaxed" style={{ fontWeight: 300 }}>
-          <span className="md:hidden">Dotknij zdjęcia, aby je powiększyć. Przytrzymaj aby przeczytać opis.</span>
+          <span className="md:hidden">Dotknij, aby powiększyć. Przytrzymaj, aby wyświetlić opis.</span>
           <span className="hidden md:inline">Kliknij na zdjęcie, aby je powiększyć.</span>
         </p>
       </header>
