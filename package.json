@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node generate-thumbnails.mjs && vite",
-    "build": "node generate-thumbnails.mjs && tsc && vite build",
+    "build": "node generate-thumbnails.mjs && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
