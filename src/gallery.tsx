@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import './gallery.css';
 
-// Definiujemy strukturę obiektu dla każdego zdjęcia (url + opcjonalny opis)
 interface ZdjecieZOpisem {
   url: string;
   title: string;
@@ -12,7 +11,6 @@ export function PelnaGaleria() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
-    // Automatyczne pobieranie wszystkich zdjęć z folderu: assets/pelna_galeria
     const imageModules = import.meta.glob('./assets/pelna_galeria/*.{png,jpg,jpeg,webp}', { eager: true });
     
     const loadedImages = Object.entries(imageModules).map(([path, mod]) => {
@@ -28,14 +26,33 @@ export function PelnaGaleria() {
     setImages(loadedImages);
   }, []);
 
+  // 📱 Obsługa przycisku Wstecz TYLKO dla zamknięcia zdjęcia
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      // Jeśli użytkownik cofa się, a zdjęcie było otwarte - zamykamy je
+      if (!event.state?.lightboxOpen) {
+        setSelectedImage(null);
+        document.body.style.overflow = 'auto';
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const openLightbox = (url: string) => {
+    window.history.pushState({ lightboxOpen: true }, ''); // Rezerwujemy krok w tył dla zdjęcia
     setSelectedImage(url);
     document.body.style.overflow = 'hidden';
   };
 
   const closeLightbox = () => {
-    setSelectedImage(null);
-    document.body.style.overflow = 'auto';
+    if (window.history.state?.lightboxOpen) {
+      window.history.back(); // To wywoła handlePopState i zamknie zdjęcie
+    } else {
+      setSelectedImage(null);
+      document.body.style.overflow = 'auto';
+    }
   };
 
   return (
@@ -54,64 +71,34 @@ export function PelnaGaleria() {
         >
           Nasze Realizacje
         </h1>
-        
-        {/* Responsywny podział na tekst mobilny i desktopowy */}
         <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto leading-relaxed" style={{ fontWeight: 300 }}>
           <span className="md:hidden">Dotknij, aby powiększyć. Przytrzymaj, aby wyświetlić opis.</span>
           <span className="hidden md:inline">Kliknij na zdjęcie, aby je powiększyć.</span>
         </p>
       </header>
 
-      {/* Nowoczesna, responsywna siatka ze zdjęciami */}
       <div className="gallery-grid">
         {images.map(({ url, title }, index) => (
           <div 
             key={index} 
             className="gallery-grid-item" 
             onClick={() => openLightbox(url)}
-            style={{
-              WebkitTouchCallout: 'none', /* Blokuje menu kontekstowe/zapis na iOS */
-              WebkitUserSelect: 'none',   /* Blokuje zaznaczanie tekstu w Safari */
-              MozUserSelect: 'none',      /* Blokuje zaznaczanie w Firefox */
-              msUserSelect: 'none',       /* Blokuje zaznaczanie w IE/Edge */
-              userSelect: 'none'          /* Standardowa blokada zaznaczania tekstu */
-            }}
+            style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
           >
-            {/* pointerEvents: 'none' sprawia, że telefon "nie widzi" fizycznego pliku graficznego przy przytrzymaniu */}
-            <img 
-              src={url} 
-              alt={title || `Realizacja ${index + 1}`} 
-              loading="lazy" 
-              style={{ pointerEvents: 'none' }} 
-            />
-            
+            <img src={url} alt={title || `Realizacja ${index + 1}`} loading="lazy" style={{ pointerEvents: 'none' }} />
             <div className="gallery-item-overlay" style={{ display: 'flex', flexDirection: 'column', gap: '6px', padding: '15px', textAlign: 'center' }}>
-              {title && (
-                <span className="gallery-item-title" style={{ fontWeight: 600, fontSize: '13px', color: '#fff', display: 'block', lineHeight: '1.3' }}>
-                  {title}
-                </span>
-              )}
-              
-              {/* FIX: Usunięto zagnieżdżenie span-w-span. Likwiduje to podwójną ramkę widoczną na screenie */}
-              <span style={{ fontSize: '12px', opacity: title ? 0.8 : 1 }}>
-                Powiększ 🔍
-              </span>
+              {title && <span className="gallery-item-title" style={{ fontWeight: 600, fontSize: '13px', color: '#fff' }}>{title}</span>}
+              <span style={{ fontSize: '12px', opacity: title ? 0.8 : 1 }}>Powiększ 🔍</span>
             </div>
           </div>
         ))}
       </div>
 
-      {/* LIGHTBOX: Podgląd zdjęcia na pełnym ekranie */}
       {selectedImage && (
         <div className="lightbox" onClick={closeLightbox}>
           <button className="lightbox-close" onClick={closeLightbox}>&times;</button>
           <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
-            {/* Zabezpieczenie zdjęcia również wewnątrz lighboxa */}
-            <img 
-              src={selectedImage} 
-              alt="Powiększona realizacja" 
-              style={{ pointerEvents: 'none', WebkitTouchCallout: 'none' }}
-            />
+            <img src={selectedImage} alt="Powiększona realizacja" style={{ pointerEvents: 'none', WebkitTouchCallout: 'none' }} />
           </div>
         </div>
       )}
