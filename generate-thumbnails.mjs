@@ -16,21 +16,31 @@ console.log('🔄 Sprawdzanie i generowanie brakujących miniaturek...');
 try {
   const files = fs.readdirSync(SOURCE_DIR);
 
-  files.forEach(file => {
-    // Sprawdzamy tylko pliki graficzne
-    if (/\.(png|jpg|jpeg|webp)$/i.test(file)) {
-      const sourcePath = path.join(SOURCE_DIR, file);
-      const targetPath = path.join(TARGET_DIR, file);
+  // 1. Definiujemy dozwolone formaty (zawsze małymi literami)
+  const ALLOWED_FORMATS = ['png', 'jpg', 'jpeg', 'webp'];
 
-      // Generuj miniaturkę TYLKO jeśli jeszcze nie istnieje
-      if (!fs.existsSync(targetPath)) {
-        sharp(sourcePath)
-          .resize({ width: 500 }) // Automatycznie zmniejsza szerokość do 500px (wysokość dopasuje się sama)
-          .toFormat(path.extname(file).substring(1), { quality: 75 }) // Kompresja jakości do 75% dla lekkości pliku
-          .toFile(targetPath)
-          .then(() => console.log(`✅ Wygenerowano miniaturkę dla: ${file}`))
-          .catch(err => console.error(`❌ Błąd podczas obróbki ${file}:`, err));
-      }
+  // 2. FILTROWANIE (Opcja A): Izolujemy tylko poprawne pliki graficzne
+  const imageFiles = files.filter(file => {
+    const ext = path.extname(file).substring(1).toLowerCase();
+    return ALLOWED_FORMATS.includes(ext);
+  });
+
+  // 3. Przetwarzamy wyłącznie przefiltrowaną listę plików
+  imageFiles.forEach(file => {
+    const sourcePath = path.join(SOURCE_DIR, file);
+    const targetPath = path.join(TARGET_DIR, file);
+
+    // Bezpiecznie wyciągamy format i wymuszamy małe litery (wymóg biblioteki Sharp)
+    const format = path.extname(file).substring(1).toLowerCase();
+
+    // Generuj miniaturkę TYLKO jeśli jeszcze nie istnieje
+    if (!fs.existsSync(targetPath)) {
+      sharp(sourcePath)
+        .resize({ width: 500 }) // Automatycznie zmniejsza szerokość do 500px
+        .toFormat(format, { quality: 75 }) // Bezpieczny, oczyszczony format
+        .toFile(targetPath)
+        .then(() => console.log(`✅ Wygenerowano miniaturkę dla: ${file}`))
+        .catch(err => console.error(`❌ Błąd podczas obróbki ${file}:`, err));
     }
   });
 } catch (error) {
