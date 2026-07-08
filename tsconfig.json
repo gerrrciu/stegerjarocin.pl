@@ -5,6 +5,7 @@
     "lib": ["DOM", "DOM.Iterable", "ES2020"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "ignoreDeprecations": "6.0",
 
     /* Tryb Bundlera (Vite) */
     "moduleResolution": "bundler",
@@ -18,8 +19,7 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
 
-    /* Dopasowanie aliasu @/ pod Twój projekt */
-    "baseUrl": ".",
+    /* Ścieżki są teraz mapowane bezpośrednio względem tego pliku */
     "paths": {
       "@/*": ["./src/*"]
     },
