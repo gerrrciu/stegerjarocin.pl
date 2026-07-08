@@ -15,16 +15,19 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
+    /* KLUCZOWE: To mówi TS, jak obsługiwać import.meta.glob, pliki CSS oraz grafiki */
+    "types": ["vite/client"],
+
     /* Wsparcie dla importów typów i grafik */
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
 
-    /* Ścieżki są teraz mapowane bezpośrednio względem tego pliku */
+    /* Ścieżki mapowane względem katalogu głównego */
     "paths": {
       "@/*": ["./src/*"]
     },
 
-    /* Luźniejsze sprawdzanie błędów, aby build przeszedł pomyślnie */
+    /* Luźniejsze sprawdzanie błędów dla sprawnego buildu */
     "strict": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
