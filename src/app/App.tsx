@@ -574,9 +574,12 @@ export default function App() {
             alt="Steger"
             className="h-7 w-auto object-contain opacity-80"
           />
-          <p className="text-muted-foreground text-xs text-center">
-            © {currentYear} Steger. Wszelkie prawa zastrzeżone.
-          </p>
+          <p className="text-muted-foreground text-xs text-center leading-relaxed">
+  © {currentYear} Steger. Wszelkie prawa zastrzeżone.<br />
+  <span className="text-[10px] text-muted-foreground/60 block mt-1">
+    Kopiowanie, rozpowszechnianie zdjęć oraz treści bez zgody autora jest zabronione.
+  </span>
+</p>
 
           <div className="flex flex-col items-center md:items-end gap-2">
             <p className="text-muted-foreground text-xs">ul. Wrocławska 79b, Jarocin</p>
