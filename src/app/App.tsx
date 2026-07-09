@@ -41,8 +41,14 @@ export default function App() {
   const [scrolled, setScrolled] = useState(false);
   const [currentYear, setCurrentYear] = useState<string>("2026");
   const [showCookies, setShowCookies] = useState(false);
-  const [view, setView] = useState<'home' | 'gallery'>('home');
+
+  // 🌐 Inicjalizacja stanu na podstawie aktualnego adresu URL (zapobiega błędom przy F5)
+  const [view, setView] = useState<'home' | 'gallery'>(() => {
+    return typeof window !== 'undefined' && window.location.hash === '#galeria' ? 'gallery' : 'home';
+  });
+  
   const [savedScrollY, setSavedScrollY] = useState(0);
+
   // === FORMULARZ ===
   const [formData, setFormData] = useState({
     name: "",
@@ -60,37 +66,35 @@ export default function App() {
       setShowCookies(true);
     }
     setCurrentYear(new Date().getFullYear().toString());
-
-    // REAKCJA NA LINK: Jeśli ktoś wejdzie bezpośrednio przez stegerjarocin.pl/#galeria
-    if (window.location.hash === "#galeria") {
-      setView("gallery");
-    }
-
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-    // Słuchacz zmian paska adresu (np. gdy użytkownik klika przycisk "Wstecz" w przeglądarce)
+  // 🌐 Globalne nasłuchiwanie zmian w pasku URL (Obsługa przycisków Wstecz/Dalej w przeglądarce)
+  useEffect(() => {
     const handleHashChange = () => {
-      if (window.location.hash === "#galeria") {
-        setView("gallery");
-      } else if (window.location.hash === "" || window.location.hash === "#home") {
-        setView("home");
+      if (window.location.hash === '#galeria') {
+        setView('gallery');
+      } else {
+        setView('home');
       }
     };
-    window.addEventListener("hashchange", handleHashChange);
 
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("hashchange", handleHashChange);
-    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
   const scrollTo = (id: string) => {
-    setView('home');
-    window.location.hash = ''; // Czyszczenie hasha przy powrocie do sekcji home
+    if (window.location.hash === '#galeria') {
+      window.location.hash = ''; // Zmiana URL automatycznie przestawi stan na 'home'
+    } else {
+      setView('home');
+    }
+    
     setTimeout(() => {
       document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
+    }, 150);
     setMenuOpen(false);
   };
 
@@ -153,7 +157,6 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between bg-[#000000]">
           <button 
             onClick={() => { 
-              setView('home'); 
               window.location.hash = ''; 
               window.scrollTo({ top: 0, behavior: "smooth" }); 
             }} 
@@ -170,10 +173,7 @@ export default function App() {
             {NAV_LINKS.map(({ label, id }) => (
               <li key={id}>
                 <button
-                  onClick={() => {
-                    setView('home');
-                    scrollTo(id);
-                  }}
+                  onClick={() => scrollTo(id)}
                   className="text-muted-foreground hover:text-foreground text-sm transition-colors duration-200 tracking-wide"
                 >
                   {label}
@@ -181,12 +181,11 @@ export default function App() {
               </li>
             ))}
 
-            {/* Przycisk galerii dla komputerów z obsługą hasha */}
+            {/* Jedyny przycisk galerii na komputerach */}
             <li>
               <button
                 onClick={() => {
-                  setSavedScrollY(window.scrollY); 
-                  setView('gallery');
+                  setSavedScrollY(window.scrollY);
                   window.location.hash = 'galeria';
                   window.scrollTo({ top: 0 });
                 }}
@@ -198,10 +197,7 @@ export default function App() {
 
             <li>
               <button
-                onClick={() => {
-                  setView('home');
-                  scrollTo("kontakt");
-                }}
+                onClick={() => scrollTo("kontakt")}
                 className="bg-accent text-accent-foreground px-5 py-2 text-sm tracking-wide hover:opacity-90 transition-opacity"
                 style={{ borderRadius: "2px" }}
               >
@@ -220,10 +216,7 @@ export default function App() {
             {NAV_LINKS.map(({ label, id }) => (
               <li key={id}>
                 <button 
-                  onClick={() => {
-                    setView('home'); 
-                    scrollTo(id);    
-                  }} 
+                  onClick={() => scrollTo(id)} 
                   className="text-foreground text-base w-full text-left py-1"
                 >
                   {label}
@@ -231,15 +224,14 @@ export default function App() {
               </li>
             ))}
 
-            {/* Odnośnik mobilny do galerii z obsługą hasha */}
+            {/* Odnośnik mobilny do galerii */}
             <li>
               <button 
                 onClick={() => {
-                  setSavedScrollY(window.scrollY); 
-                  setView('gallery');              
+                  setSavedScrollY(window.scrollY);
                   window.location.hash = 'galeria';
-                  setMenuOpen(false);              
-                  window.scrollTo({ top: 0 });     
+                  setMenuOpen(false);
+                  window.scrollTo({ top: 0 });
                 }} 
                 className="text-foreground text-base w-full text-left py-1 font-medium text-accent"
               >
@@ -280,7 +272,7 @@ export default function App() {
                 Nasze wykonanie.
               </h1>
               <p className="text-muted-foreground max-w-lg text-base md:text-lg leading-relaxed mb-10" style={{ fontWeight: 300 }}>
-                Tworzymy wyjątkowy wygląd Twojego samochodu.
+                Od niemal 20 lat tworzymy wyjątkowy wygląd Twojego samochodu.
                 Przyciemnianie szyb, zmiana koloru, dechroming i ochrona lakieru folią PPF.
               </p>
               <div className="flex flex-wrap gap-4">
@@ -320,7 +312,7 @@ export default function App() {
                 </p>
                 <p className="text-muted-foreground leading-relaxed" style={{ fontWeight: 300 }}>
                   Używamy wyłącznie sprawdzonych, wysokiej jakości folii renomowanych producentów.
-                  Naszym celem jest Twoja satysfakcja i efekt, który przekracza oczekiwania.
+                  Dzięki prawie 20-letniemu doświadczeniu w branży, naszym celem jest Twoja satysfakcja i efekt, który przekracza oczekiwania.
                 </p>
               </div>
 
@@ -396,8 +388,7 @@ export default function App() {
               <div className="text-center mt-12">
                 <button
                   onClick={() => { 
-                    setSavedScrollY(window.scrollY); 
-                    setView('gallery'); 
+                    setSavedScrollY(window.scrollY);
                     window.location.hash = 'galeria';
                     window.scrollTo({ top: 0 }); 
                   }}
@@ -542,7 +533,7 @@ export default function App() {
                       className="text-accent underline underline-offset-2 hover:opacity-80 transition-opacity"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      Polityka Privatności
+                      Polityka Prywatności
                     </a>.
                   </label>
                 </div>
@@ -570,17 +561,17 @@ export default function App() {
       ) : (
         /* PODSTRONA PEŁNEJ GALERII */
         <div className="pt-24 max-w-6xl mx-auto px-6 pb-12 relative">
+          {/* 1. Najpierw cała galeria ze zdjęciami */}
           <PelnaGaleria />
           
-          {/* Przycisk powrotu czyszczący hash z paska adresu */}
-          <div className="sticky bottom-6 z-40 mt-12 pointer-events-none">
+          {/* 2. Przycisk umieszczony na samym dole — poprawnie ostylowany i domknięty */}
+          <div className="sticky bottom-6 z-40 mt-12 pointer-events-none flex justify-center">
             <button 
               onClick={() => {
-                setView('home'); 
-                window.location.hash = ''; 
+                window.location.hash = ''; // Zmiana hasha wywoła 'hashchange' i przełączy stan na 'home'
                 setTimeout(() => {
                   window.scrollTo({ top: savedScrollY, behavior: 'smooth' });
-                }, 50);
+                }, 100);
               }} 
               className="pointer-events-auto bg-[#d10000]/80 backdrop-blur border border-[#d10000]/30 text-white hover:bg-[#d10000]/95 px-4 py-2.5 text-xs tracking-wider uppercase inline-flex items-center gap-2 transition-all duration-200 shadow-xl"
               style={{ borderRadius: "2px" }}
